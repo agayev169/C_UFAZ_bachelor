@@ -1,0 +1,9 @@
+#include <stdio.h>
+
+int main {
+	int n;
+	fscanf(stdin, "%d", &n);
+	fprintf(stdout, "n = %d\n", n);
+
+	return 0;
+}

@@ -1,0 +1,51 @@
+#include <stdio.h>
+
+int f (int n);
+int square (int n);
+float power (int n, float x);
+
+int main () {
+	printf ("num = ");
+	int num;
+	scanf ("%d", &num);
+	if (num < 0)
+		printf ("Error! Number cannot be less than 0\n");
+	else {
+		printf("factorial (%d) = %d\n", num, f(num));
+		printf("square (%d) = %d\n", num, square(num));
+	}
+
+	float num2;
+	int pow;
+	printf ("num = ");
+	scanf ("%f", &num2);
+	printf ("power = ");
+	scanf ("%d", &pow);
+
+	if (num < 0)
+		printf ("Error! Number cannot be less than 0\n");
+	else 
+		printf("power (%d, %f) = %f\n", pow, num2, power(pow, num2));
+
+
+	return 0;
+}
+
+int f (int n) {
+	int static counter = 1;
+	if (counter == 1) printf("Hello World!\n");
+	counter++;
+	if (n == 0) return 1;
+	return (n * f (n - 1));
+}
+
+int square (int n) {
+	if (n == 0) return 0;
+	else if (n == 1) return 1;
+	return (2 * square(n-1) - square(n-2) + 2);
+}
+
+float power (int n, float x){
+	if (n == 0) return 1;
+	return (x * (power(n-1, x)));
+}

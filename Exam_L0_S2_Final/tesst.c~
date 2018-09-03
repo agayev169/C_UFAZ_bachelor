@@ -1,0 +1,203 @@
+/* Fig. 11.16: fig11_16.c
+   This program reads a random access file sequentially, updates data
+   already written to the file, creates new data to be placed in the
+   file, and deletes data previously in the file. */
+#include <stdio.h>
+/* bookData structure definition */
+typedef struct { 
+   int number;          /* account number */
+   char author[ 30 ];  /* account last name */
+   char editor[ 30 ]; /* account first name */
+   char title[100];
+   int stock;       /* account stock */
+}Typebook; /* end structure bookData */
+
+int enterChoice( void );
+void printData( FILE *readPtr );
+void updateBook( FILE *fPtr );
+void newBook( FILE *fPtr );
+void deleteBook( FILE *fPtr );
+void createData(FILE *fPtr);
+
+int main()
+{  FILE *cfPtr; /* UFAZLib.dat file pointer */
+   int choice;  /* user's choice */
+   /* fopen opens the file; exits if file cannot be opened */
+   if ( ( cfPtr = fopen( "UFAZLib.dat", "ab+" ) ) == NULL ) {
+      printf( "File could not be opened.\n" );
+   } /* end if */
+   else { 
+      createData(cfPtr);
+      /* enable user to specify action */
+      while ( ( choice = enterChoice() ) != 5 ) { 
+         switch ( choice ) { 
+            /* create text file from record file */
+			case 1:
+				createData(cfPtr);
+				break;
+			case 2:
+				printf("1,2,3,4,5,6");
+				switch (choice = enterChoice()) {
+					case 5:
+               printData( cfPtr );
+               break;
+            /* update record */
+            case 4:
+               updateBook( cfPtr );
+               break;
+            /* create record */
+            case 1:
+               newBook( cfPtr );
+               break;
+            /* delete existing record */
+            case 2:
+               deleteBook( cfPtr );
+               break;
+				}
+            /* display message if user does not select valid choice */
+            default:
+               printf( "Incorrect choice\n" );
+               break;
+         } /* end switch */
+      } /* end while */
+      fclose( cfPtr ); /* fclose closes the file */
+   } /* end else */
+   return 0; /* indicates successful termination */
+} /* end main */
+
+/* create formatted text file for printing */ 
+void printData( FILE *readPtr )
+{  FILE *writePtr; /* UFAZBooks.txt file pointer */
+   /* create bookData with default information */
+   Typebook book = { 0, "", "", "", 0 };
+   /* fopen opens the file; exits if file cannot be opened */
+   if ( ( writePtr = fopen( "UFAZBooks.txt", "w" ) ) == NULL ) {
+      printf( "File could not be opened.\n" );
+   } /* end if */
+   else { 
+      rewind( readPtr ); /* sets pointer to beginning of file */
+      /* copy all records from random-access file into text file */
+      while ( !feof( readPtr ) ) { 
+         fread( &book, sizeof( Typebook ), 1, readPtr );
+         /* write single record to text file */
+         if ( book.number != 0 ) {
+            fprintf( writePtr, "%-6d%-16s%-11s%-10s%d\n",
+               book.number, book.author,
+               book.editor, book.title, book.stock );
+         } /* end if */
+      } /* end while */
+      fclose( writePtr ); /* fclose closes the file */
+   } /* end else */
+} /* end function printData */
+
+/* update stock in record */
+void updateBook( FILE *fPtr )
+{  int account;        /* account number */
+   /* create bookData with no information */
+   Typebook book = { 0, "", "", "", 0 };
+   /* obtain number of account to update */
+   printf( "Enter account to update ( 1 - 100 ): " );
+   scanf( "%d", &account );
+   /* move file pointer to correct record in file */
+   fseek( fPtr, ( account - 1 ) * sizeof( Typebook ), 
+      SEEK_SET );
+   /* read record from file */
+   fread( &book, sizeof( Typebook ), 1, fPtr );
+   /* display error if account does not exist */
+   if ( book.number == 0 ) {
+      printf( "Acount #%d has no information.\n", account );
+   } /* end if */
+   else { /* update record */
+      printf( "%-6d%-16s%-11s%s%d\n\n", 
+         book.number, book.author, 
+         book.editor, book.title, book.stock );
+      printf( "%-6d%-16s%-11s%s%d\n", 
+         book.number, book.author, 
+         book.editor, book.title, book.stock );
+      /* move file pointer to correct record in file */
+      fseek( fPtr, ( account - 1 ) * sizeof( Typebook ), 
+         SEEK_SET );
+      /* write updated record over old record in file */
+      fwrite( &book, sizeof( Typebook ), 1, fPtr );
+   } /* end else */
+
+} /* end function updateBook */
+
+/* delete an existing record */
+void deleteBook( FILE *fPtr )
+{  Typebook book; /* stores record read from file */
+   Typebook blankbook = { 0, "", "", "", 0 }; /* blank book */
+   int accountNum; /* account number */
+   /* obtain number of account to delete */
+   printf( "Enter account number to delete ( 1 - 100 ): " );
+   scanf( "%d", &accountNum );
+   /* move file pointer to correct record in file */
+   fseek( fPtr, ( accountNum - 1 ) * sizeof( Typebook ), SEEK_SET );
+   /* read record from file */
+   fread( &book, sizeof( Typebook ), 1, fPtr );
+   /* display error if record does not exist */
+   if ( book.number == 0 ) {
+      printf( "Account %d does not exist.\n", accountNum );
+   } /* end if */
+   else { /* delete record */
+      /* move file pointer to correct record in file */
+      fseek( fPtr, ( accountNum - 1 ) * sizeof( Typebook ), SEEK_SET );
+      /* replace existing record with blank record */
+      fwrite( &blankbook, 
+         sizeof( Typebook ), 1, fPtr );
+   } /* end else */
+} /* end function deleteBook */
+
+/* create and insert record */
+void newBook( FILE *fPtr )
+{  /* create bookData with default information */
+   Typebook book = { 0, "", "", 0 };
+   int accountNum; /* account number */
+   /* obtain number of account to create */
+   printf( "Enter new account number ( 1 - 100 ): " );
+   scanf( "%d", &accountNum );
+   /* move file pointer to correct record in file */
+   fseek( fPtr, ( accountNum - 1 ) * sizeof( Typebook ), SEEK_SET );
+   /* read record from file */
+   fread( &book, sizeof( Typebook ), 1, fPtr );
+   /* display error if account already exists */
+   if ( book.number != 0 ) {
+      printf( "Book #%d already contains information.\n",
+              book.number );
+   } /* end if */
+   else { /* create record */
+      /* user enters last name, first name and stock */
+      printf( "Enter author, editor, title, stock\n? " );
+      scanf( "%s%s%s%d", book.author, book.editor, book.title, 
+         &book.stock );
+      book.number = accountNum;
+      /* move file pointer to correct record in file */
+      fseek( fPtr, ( book.number - 1 ) * 
+         sizeof( Typebook ), SEEK_SET );
+      /* insert record in file */
+      fwrite( &book, 
+         sizeof( Typebook ), 1, fPtr );
+   } /* end else */
+} /* end function n	ewRecord */
+
+/* enable user to input menu choice */
+int enterChoice( void )
+{  int menuChoice; /* variable to store user's choice */
+   /* display available options */
+   printf( "\nEnter your choice\n"
+      "1 - store a formatted text file of acounts called\n"
+      "    \"UFAZBooks.txt\" for printing\n"
+      "2 - update an account\n"
+      "3 - add a new account\n"
+      "4 - delete an account\n"
+      "5 - end program\n? " );
+   scanf( "%d", &menuChoice ); /* receive choice from user */
+   return menuChoice;
+} /* end function enterChoice */
+
+void createData(FILE *db) {
+		Typebook blank = {0, "", "", "", 0};
+		for (int i = 1; i <= 100; ++i) {
+			fwrite(&blank, sizeof(Typebook), 1, db);
+		}
+}

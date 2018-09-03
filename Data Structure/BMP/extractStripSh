@@ -1,0 +1,21 @@
+#!/bin/bash
+
+for i in * 
+do 
+	if [ $# -eq 1 ]
+	then
+		if [[ $1 = "-h" || $1 = "--help" ]]
+		then
+			printf "To extract n pixels from all files in the directory type:\n./extractStripSh -n\nAs default n = 100\n"
+			exit
+		elif [ $1 -eq $1 ] 2>/dev/null
+    		then
+			./extractStrip $1 $i
+		else
+			printf "To extract n pixels from all files in the directory type:\n./extractStripSh -n\nAs default n = 100\n"
+			exit
+		fi
+	else
+		./extractStrip -100 $i
+	fi
+done

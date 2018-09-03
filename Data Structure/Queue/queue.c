@@ -1,0 +1,119 @@
+#include <stdio.h>
+#include "queue.h"
+
+int createFifo(Fifo *p, int n) {
+    if ((p->fifo = (int*)calloc(n, sizeof(int))) != NULL) {
+        p->size = n;
+        p->enqueue = 0;
+        p->dequeue = -1;
+        return 0;
+    }
+    fprintf(stderr, "Memory allocation error\n");
+    exit(1);
+}
+
+int enqueue(Fifo *p, int n) {
+    if (p->dequeue == p->enqueue || p->size == 0) {
+        // fprintf(stderr, "Queue is full\n");
+        expand(p);
+    }
+    p->fifo[p->enqueue] = n;
+    if (p->dequeue == -1) p->dequeue = p->enqueue;
+    p->enqueue = (p->enqueue + 1) % p->size;
+    return 0;
+}
+
+int dequeue(Fifo *p) {
+    if (p->dequeue == -1) {
+        fprintf(stderr, "Queue is empty\n");
+        return -1;
+    }
+    int temp = p->fifo[p->dequeue];
+    p->fifo[p->dequeue] = 0;
+    p->dequeue = (p->dequeue + 1) % p->size;
+    if (p->dequeue == p->enqueue) p->dequeue = -1;
+    compress(p);
+    return temp;
+}
+
+int expand(Fifo *p) {
+    int *temp, *temp2;
+    if (!(temp = (int*)calloc(p->size + 5, sizeof(int)))) {
+        fprintf(stderr, "Error! No memory to reallocate a queue\n");
+        exit(1);
+    }
+    printf("OK!\n");
+    if (p->dequeue == -1) {
+        temp2 = p->fifo;
+        p->fifo = temp;
+        free(temp2);
+        return 0;
+    }
+    for (int i = 0; i < p->size; i++) {
+        temp[i] = p->fifo[(p->dequeue + i) % p->size];
+    }
+    p->enqueue = p->size;
+    p->dequeue = 0;
+    temp2 = p->fifo;
+    p->fifo = temp;
+    free(temp2);
+    p->size += 5;
+    return 0;
+}
+
+int compress(Fifo *p) {
+    if ((p->enqueue > p->dequeue && p->dequeue + p->size - p->enqueue >= 5) ||
+            (p->dequeue > p->enqueue && p->enqueue - p->dequeue > 5) ||
+            (p->dequeue == -1 && p->size - p->enqueue > 5)) {
+        int *temp, *temp2;
+        if (!(temp = (int*)calloc(p->size - 5, sizeof(int)))) {
+            fprintf(stderr, "Error! No memory to reallocate a queue\n");
+            exit(1);
+        }
+        int i = 0;
+        while (1) {
+            temp[i] = p->fifo[(p->dequeue + i) % p->size];
+            i++;
+            if ((p->dequeue + i) % p->size == p->enqueue) break;
+        }
+        p->size -= 5;
+        p->enqueue = i % p->size;
+        p->dequeue = 0;
+        temp2 = p->fifo;
+        p->fifo = temp;
+        free(temp2);
+        return 0;
+    }
+    return 1;
+}
+
+int printQueue(Fifo p) {
+    printf("Value of enqueue: %d\nValue of dequeue: %d\n", p.enqueue, p.dequeue);
+    return 0;
+}
+
+int printAll(Fifo p) {
+    if (p.dequeue == -1) {
+        fprintf(stderr, "Queue is empty!\n");
+        return 1;
+    }
+
+    int i = 0;
+    do {
+        printf("Value #%d: %d\n", i, p.fifo[(p.dequeue + i) % p.size]);
+        i++;
+        if ((p.dequeue + i) % p.size == p.enqueue) break;
+    } while (1);
+
+    return 0;
+}
+
+int destroy(Fifo *p) {
+    free(p->fifo);
+    // createFifo(p, 5);
+    p->fifo = NULL;
+    p->size = 0;
+    p->dequeue = -1;
+    p->enqueue = 0;
+    return 0;
+}

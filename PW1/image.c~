@@ -1,0 +1,101 @@
+#include "image.h"
+
+void I_replace (Color *temp, Color *img, int nb_pixels) {
+	for (int i = 0; i < nb_pixels; i++) temp[i] = C_replace(img[i]);
+}
+
+void I_print (Color *img, int nb_pixels) {
+	for (int i = 0; i < nb_pixels; i++) C_print (img[i]);
+}
+
+void I_coef (Color *img, int nb_pixels, float coef) {
+	for (int i = 0; i < nb_pixels; i++) img [i] = C_multiply (img[i], coef);
+}
+
+void I_negative (Color *img, int nb_pixels) {
+	for (int i = 0; i < nb_pixels; i++) img [i] = C_negative (img[i]);
+}
+
+void I_permute (Color *img, int nb_pixels) {
+	for (int i = 0; i < nb_pixels; i++) img [i] = C_permute (img[i]);
+}
+
+void I_grayScale (Color *img, int nb_pixels) {
+	for (int i = 0; i < nb_pixels; i++) img [i] = C_grayScale (img[i]);
+}
+
+void I_thershold (Color *img, int nb_pixels, int th) {
+	for (int i = 0; i < nb_pixels; i++) img [i] = C_th (img[i], th);
+}
+
+void I_compose (Color *img1, Color *img2, int nb_pixels, Color target) {
+	for (int i = 0; i < nb_pixels; i++) if (C_areEqual(img1[i], target)) img1[i] = C_replace(img2[i]);
+}
+
+void I_addColor (Color *img, int nb_pixels, Color c) {
+	for (int i = 0; i < nb_pixels; i++) img[i] = C_addCoef (img[i], c, 1);
+}
+
+void I_gradient (Color *img_in, Color *img_out, int nb_pixels) {
+	img_out[0] = C_new (127, 127, 127);
+	Color *temp;
+	for (int i = nb_pixels - 1; i > 0; i--) 
+		img_out[i] = C_gradient (img_in[i-1], img_in[i]);
+}
+
+Color I_average (Color *img, int nb_pixels, int fromhere, int nb_pixels_average) {
+	int lastpx = fromhere + nb_pixels_average - 1;
+	Color avg = C_new(0, 0, 0);
+	if (lastpx < nb_pixels && fromhere >= 0) {
+		for (int i = fromhere; i <= lastpx; i++) {
+			avg.red += img[i].red;
+			avg.green += img[i].green;
+			avg.blue += img[i].blue;
+		}
+	}
+	avg.red /= nb_pixels_average;
+	avg.green /= nb_pixels_average;
+	avg.blue /= nb_pixels_average;
+	
+	return avg;
+}
+
+void I_motionBlur (Color *img, Color *img_out, int nb_pixels, int strength) {
+	for (int i = nb_pixels - strength - 1; i >= 0; i--) img_out[i] = I_average(img, nb_pixels, i, strength);
+}
+
+void I_flipX (Color *img, int width, int height) {
+	Color temp;
+	for (int i = 0; i < height; i++) {
+		for (int j = 0; j < width/2; j++) {
+			temp = C_replace (img[width * i + j]);
+			img[width * i + j] = C_replace (img[width * (i + 1) - j - 1]);
+			img[width * (i + 1) - j - 1] = C_replace (temp);
+		}
+	}
+}
+
+void I_flipY (Color *img, int width, int height) {
+	Color temp;
+	for (int i = 0; i < width/2; i++) {
+		for (int j = 0; j < height; j++) {
+			temp = C_replace (img[width * i + j]);
+			img[width * i + j] = C_replace (img[width * (height - i - 1) + j]);
+			img[width * (height - i - 1) + j] = C_replace (temp);
+		}
+	}
+}
+
+void I_mirrorRight (Color *img, int width, int height) {
+	Color temp;
+	for (int i = 0; i < height; i++)
+		for (int j = 0; j < width; j++)
+			img[width * i + j] = C_replace (img[width * (i + 1) - j - 1]);
+}
+
+void I_mirrorLeft (Color *img, int width, int height) {
+	Color temp;
+	for (int i = 0; i < height; i++)
+		for (int j = 0; j < width; j++)
+			img[width * (i + 1) - j - 1] = C_replace (img[width * i + j]);
+}

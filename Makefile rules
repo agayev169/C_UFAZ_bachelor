@@ -1,0 +1,8 @@
+Makefile rules
+
+$@ target
+$^ components
+$< the first component
+$(wildcard *.c)
+$(SOURCES:.c=.o)
+

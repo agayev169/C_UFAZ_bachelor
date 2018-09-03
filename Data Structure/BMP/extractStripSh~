@@ -1,0 +1,11 @@
+#!/bin/bash
+
+for i in * 
+do 
+	if [ $# -eq 1 ]
+	then
+    	./extractStrip $1 $i
+    elif
+    	./extractStrip -100 $i
+    fi
+done

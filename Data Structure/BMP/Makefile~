@@ -1,0 +1,4 @@
+SOURCES=*c
+
+extractStrip: $(SOURCES)
+	gcc $(SOURCES) -o $^

@@ -1,0 +1,113 @@
+#include <stdio.h>
+
+int square_i (int n);
+float power_i (int n, float x);
+int sumOfOdd_i (int n);
+float sumOfInverse_i (int n);
+int howManyTimesSubstract_i (int a, int b);
+int divideBy7_i (int n);
+int magnitude_i (int n);
+int reverse_i (int n);
+
+int main () {
+	int num;
+	float x;
+	int num2;
+
+	/*printf("num = ");
+	scanf("%d", &num);
+	if (num < 0) num *= -1;
+	printf("square_i(%d) = %d	\n", num, square_i(num));
+
+	printf("power = ");
+	scanf("%d", &num);
+	printf("x = ");
+	scanf("%f", &x);
+	printf("power_i(%d, %f) = %f\n", num, x, power_i(num, x));
+
+	printf("num = ");
+	scanf("%d", &num);
+	if (num < 1) 
+		printf("Error!\n");
+	else
+		printf("sumOfInverse_i(%d) = %f\n", num, sumOfInverse_i(num));
+
+	printf("num = ");
+	scanf("%d", &num);
+	printf("num2 = ");
+	scanf("%d", &num2);
+	printf("howManyTimesSubstract_i(%d, %d) = %d\n", num, num2, howManyTimesSubstract_i(num, num2));
+
+	printf("num = ");
+	scanf("%d", &num);
+	if (num < 1) 
+		printf ("Error!\n");
+	else
+		printf("magnitude_i(%d) = %d\n", num, magnitude_i(num));*/
+
+	printf("num = ");
+	scanf("%d", &num);
+	if (num < 0) 
+		printf ("Error!\n");
+	else
+		printf("reverse_i(%d) = %d\n", num, reverse_i(num));
+}
+
+int square_i (int n) {
+	int result = 0;
+	for (int i = 0; i < n; i++) 
+		result += n;
+	return result;
+}
+
+float power_i (int n, float x) {
+	float result = 1;
+	for (int i = 0; i < n; i++) result *= x;
+	return result;
+}
+
+//int sumOfOdd_i (int n) { }
+
+float sumOfInverse_i (int n) {
+	float result = 0;
+	for (int i = 1; i <= n; i++) 
+		result += 1./i;
+	return result;
+}
+
+
+int howManyTimesSubstract_i (int a, int b) {
+	int counter = 0;
+	while (a > b) {
+		a -= b;
+		counter++;
+	}
+	return counter;
+}
+
+int divideBy7_i (int n) { 
+	return howManyTimesSubstract_i (n, 7);
+}
+
+int magnitude_i (int n) {
+	int magn = 1;
+	while (n > 10) {
+		magn *= 10;
+		n /= 10;
+	}
+	return magn;
+}
+
+int reverse_i (int n) {
+	int result = 0;
+	int temp = n;
+	int counter = 0
+	while (counter != magnitude_i(n)) {
+		result += temp % 10 * magnitude_i(temp);
+		temp /= 10;
+		counter++;
+	}
+	return result;
+}
+
+

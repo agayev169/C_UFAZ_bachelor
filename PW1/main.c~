@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include "color.h"
+#include "image.h"
+#include "ppm.h"
+#define WIDTH 605
+#define HEIGHT 600
+
+int main () {
+	Color *img;
+	int nbpixels;
+	struct ppm p;
+
+	p = PPM_new("merida.ppm");
+	nbpixels = PPM_nbPixels(p);
+	img = PPM_pixels(p);
+	Color temp[nbpixels];
+
+	/*I_replace(temp, img, nbpixels);
+	I_grayScale(temp, nbpixels);
+	PPM_save(p, temp, "gray.ppm");
+	
+	I_replace(temp, img, nbpixels);
+	I_thershold(temp, nbpixels, 127);
+	PPM_save(p, temp, "th.ppm");
+
+	I_replace(temp, img, nbpixels);
+	I_negative(temp, nbpixels);
+	PPM_save(p, temp, "neg.ppm");
+	
+	I_replace(temp, img, nbpixels);
+	I_coef (temp, nbpixels, 1.2);
+	PPM_save(p, temp, "coef.ppm");
+	
+	I_replace(temp, img, nbpixels);
+	I_permute (temp, nbpixels);
+	PPM_save(p, temp, "permute.ppm");
+
+	I_replace(temp, img, nbpixels);
+	I_addColor(temp, nbpixels, C_new(127, 127, 127));
+	PPM_save(p, temp, "addcolor.ppm");
+	
+	I_replace(temp, img, nbpixels);
+	I_gradient(img, temp, nbpixels);
+	PPM_save(p, temp, "gradient.ppm");
+	
+	I_replace(temp, img, nbpixels);
+	I_motionBlur(img, temp, nbpixels, 15);
+	PPM_save(p, temp, "mb.ppm");
+	
+	p = PPM_new("forest.ppm");
+	nbpixels = PPM_nbPixels(p);
+	Color *forest = PPM_pixels(p);
+
+	I_replace(temp, img, nbpixels);
+	I_compose(temp, forest, nbpixels, C_new(0, 111, 92));
+	PPM_save(p, temp, "comp.ppm");
+	
+	I_replace(temp, img, nbpixels);
+	I_flipX(temp, WIDTH, HEIGHT);
+	PPM_save(p, temp, "flipx.ppm");
+	
+	I_replace(temp, img, nbpixels);
+	I_mirrorRight(temp, WIDTH, HEIGHT);
+	PPM_save(p, temp, "mirrorRight.ppm");
+	
+	I_replace(temp, img, nbpixels);
+	I_mirrorLeft(temp, WIDTH, HEIGHT);
+	PPM_save(p, temp, "mirrorLeft.ppm");*/
+	
+	I_replace(temp, img, nbpixels);
+	I_flipY(temp, 5, 5);
+	PPM_save(p, temp, "flipy.ppm");
+
+	return 0;
+}
+
