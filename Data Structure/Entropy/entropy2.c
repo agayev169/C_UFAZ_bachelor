@@ -6,7 +6,7 @@
 #include <unistd.h>
 #include <math.h>
 
-float entropy(long symbols[], long count);
+double entropy(long symbols[], long count);
 
 int main(int argc, char *argv[]) {
     if (argc < 2) {
@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
     char *filename = argv[1];
     long *symbols = (long*) calloc(256, sizeof(long));
 
-    int fd = open("test.txt", O_RDONLY);
+    int fd = open(filename, O_RDONLY);
     if (fd == -1) {
         printf("Error! Cannot open a file!\n");
         exit(1);
@@ -41,11 +41,11 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
-float entropy(long symbols[], long count) {
-    float result = 0;
+double entropy(long symbols[], long count) {
+    double result = 0;
     for (int i = 0; i < 256; i++) {
         if (symbols[i] == 0) continue;
-        result -= ((float) symbols[i] / (float) count) * log2(((float) symbols[i] /(float) count));
+        result -= ((double) symbols[i] / (double) count) * log2(((double) symbols[i] /(double) count));
     }
     return result;
 } 
