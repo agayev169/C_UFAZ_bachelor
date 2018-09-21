@@ -1,2 +1,2 @@
-# C_UFAZ_bachelor
-C codes written during my education in UFAZ as bachelor
+# C UFAZ Bachelor
+C codes written during my education in UFAZ(Bachelor of Computer Science)
