@@ -1,3 +1,5 @@
+This project is done for archaeologists to cut a slice from BMP images to observe flatten images of objects with vertical symmmetry 
+
 To compile a project type make in terminal.
 To call a manual for C code type ./extractStrip -h or ./extractStrip --help in terminal.
 To call a manual for bash code type ./extractStripSh --help or ./extractStripSh --help in terminal.

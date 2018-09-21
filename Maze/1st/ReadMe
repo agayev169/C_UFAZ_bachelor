@@ -1,4 +1,3 @@
-To compile the code you need to write:
+To compile the code you need to type in terminal:
 	gcc main.c Cell.c -I include -L.  -lMaze -o maze -lm
 After you will get the executable file with name maze
-Also there is executable maze file in archive which works properly
