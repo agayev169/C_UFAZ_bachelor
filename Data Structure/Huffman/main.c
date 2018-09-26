@@ -66,18 +66,19 @@ int main(){
 
 char *readFile() {
     FILE *file = fopen("test.txt", "r");
+    if (file == NULL) return NULL;  //could not open
     char *code;
     size_t n = 0;
     int c;
-    if (file == NULL) return NULL;  //could not open
     fseek(file, 0, SEEK_END);
     long f_size = ftell(file);
     fseek(file, 0, SEEK_SET);
-    code = malloc(f_size);
+    code = malloc(f_size + 1);
     while ((c = fgetc(file)) != EOF) {
         code[n++] = (char)c;
     }
     code[n] = '\0';
+    fclose(file);
     return code;
 }
 

@@ -52,6 +52,7 @@ HuffNode *buildTree(HLNode *myList){
             HL_Print(myList);
         }
     }
+    return NULL;
 }
 //-----------------------------------------------
 void printHTree(HuffNode *hTree){
