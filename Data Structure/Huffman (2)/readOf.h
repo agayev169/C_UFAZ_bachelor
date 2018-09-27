@@ -9,7 +9,7 @@ typedef struct HuffChar {
     char bitstab[8];
 } HuffChar;
 
-void writeBinaryFile(FILE *file, int size, HuffChar tab[], char *str);
+void writeBinaryFile(FILE *file, int size, HuffChar tab[]);
 char *readBinaryFile(FILE *file);
 
 #endif

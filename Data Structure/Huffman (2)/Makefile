@@ -2,4 +2,4 @@ SOURCES=$(wildcard *.c)
 EXEC=run
 
 $(EXEC) : $(SOURCES)
-	gcc $(SOURCES) -o $(EXEC)
+	gcc $(SOURCES) -o $(EXEC) -lm

@@ -19,6 +19,6 @@ char *readBinaryFile(FILE *file) {
         printf("Char %c: %s\n", newch.l, newch.bitstab);
     }
 
-    return NULL;
     // Reading the compressed text
+    return NULL;
 }
