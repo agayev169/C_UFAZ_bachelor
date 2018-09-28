@@ -1,5 +1,6 @@
 #include <string.h>
 #include <math.h>
+#include <string.h>
 #include "LL.h"
 #include "HT.h"
 
@@ -7,6 +8,8 @@ char *readFile();
 unsigned maxChar(LLNode *pList);
 unsigned nbrChar(LLNode *pList);
 double entropy(LLNode *pList);
+unsigned char *str_to_bits(char *str, int size);
+unsigned char *bits_to_str(char *bits, int size);
 
 int main(){
     LLNode *pList=NULL;
@@ -50,17 +53,47 @@ int main(){
     // printf("%s", tmp);
     FILE *wr = fopen("test_bin.bin", "wb");
     i = 0;
-    do { //printf("%c",tc[i]);
-        str = (char*) calloc(10, sizeof(char));
-        int size = 0;
-        findLetter(huffmanTree, str, tc[i], 0, &size);
-        for (int i = 0; i < size; i++) {
-            fprintf(wr, "%c", str[i]);
-        }
+    str = (char*) calloc(2000, sizeof(char));
+    int size = 0;
+    int size_all = 0;
+    do { 
+        char *tmp = (char*) calloc(8, sizeof(char));
+        findLetter(huffmanTree, tmp, tc[i], 0, &size);
+        size_all += size;
+        strcat(str, tmp);
         i++;
+
     } while(tc[i]!='\n');
 
+    unsigned char* bits = str_to_bits(str, size_all);
+    printf("str: %s, size: %d\n", str, size_all);
+    fwrite(bits, 1, ceil(size_all / 8), wr);
+    fclose(wr);
+
     return 0;
+}
+
+unsigned char *str_to_bits(char *str, int size) {
+    unsigned char* bits_char = (char*) calloc(ceil(size / 8), sizeof(char));
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < 8 && j < (size - i * 8); j++) {
+            bits_char[i] = bits_char[i] << 1;
+            bits_char[i] += (str[i * 8 + j] - '0');
+            // printf("bit: %d, str[%d]: %c\n", bits_char[i], i + j, str[i + j]);
+        }
+    }
+    return bits_char;
+}
+
+unsigned char *bits_to_str(char *bits_char, int size) {
+    // TODO
+    unsigned char* str = (char*) calloc(size * 8, sizeof(char));
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < 8; j++) {
+            str[i * 8 + j] = (bits_char[i] >>  7 - j);
+        }
+    }
+    return bits_char;
 }
 
 
