@@ -118,3 +118,30 @@ int findLetter(HuffNode *hTree, char *str, char l, int count, int *size) {
     }
     return 1;
 }
+//-----------------------------------------------
+void printCharToFile(FILE *f, HuffNode *hTree, char *str, int count) {
+    if (hTree->left == NULL && hTree->right == NULL) {
+        // printf("%c : ", hTree->ch);
+        fwrite(&hTree->ch, 1, 1, f);
+        unsigned char byte = bits_to_char(str, count);
+        fwrite(&byte, 1, 1, f);
+    } else {
+        if (hTree->left) {
+            str[count] = '0';
+            printCharToFile(f, hTree->left, str, count + 1);
+        }
+        if (hTree->right) {
+            str[count] = '1';
+            printCharToFile(f, hTree->right, str, count + 1);
+        }
+    }
+}
+//-----------------------------------------------
+char bits_to_char(char *bits, int size) {
+    char byte = 0;
+    for (int i = 0; i < size; i++) {
+        byte = byte << 1;
+        byte += bits[i] - '0';
+    }
+    return byte;
+}

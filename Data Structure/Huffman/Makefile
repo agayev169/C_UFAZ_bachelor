@@ -7,9 +7,9 @@
 # MACROS ;; SOURCES= LL.c Stack.c main.c
 
 SOURCES=$(wildcard *.c)
-EXEC=project
+EXEC=run
 
-$(EXEC) : $(OBJECTS)
+$(EXEC) : $(SOURCES)
 	gcc $^ -o $@ -lm
 
 clean :

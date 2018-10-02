@@ -29,6 +29,8 @@ HuffNode *buildTree(HLNode *myList);
 void printHTree(HuffNode *hTree);
 void printChar(HuffNode *hTree, char *str, int count);
 int findLetter(HuffNode *hTree, char *str, char l, int count, int *size);
+void printCharToFile(FILE *f, HuffNode *hTree, char *str, int count);
+char bits_to_char(char *bits, int size);
 
 //HuffNode *twoLeafs(LLNode *first, LLNode *second);
 //HuffNode *mixHTree(HuffNode *old, LLNode *first, LLNode *second);

@@ -4,26 +4,26 @@
 #include "LL.h"
 #include "HT.h"
 
-char *readFile();
+char *readFile(char *filename);
 unsigned maxChar(LLNode *pList);
 unsigned nbrChar(LLNode *pList);
 double entropy(LLNode *pList);
 unsigned char *str_to_bits(char *str, int size);
-unsigned char *bits_to_str(char *bits, int size);
+unsigned char *bits_to_str(unsigned char *bits, int size, int str_size);
 
-int main(){
+
+int main() {
     LLNode *pList=NULL;
     int n;
     char cAction, l;
-    char *tc=readFile();
+    char *tc=readFile("test.txt");
 
     int i=0;
-    do { //printf("%c",tc[i]);
+    do {
         if(!LL_Search_L(pList, tc[i]))
             LL_add(&pList, tc[i], 1);
         i++;
-    } while(tc[i]!='\n'); //'\0' for multi lines
-    // free(tc);
+    } while(tc[i]!='\n');
     LL_Print(pList);
     LLNode *psList = NULL;
     while(pList) {
@@ -38,67 +38,76 @@ int main(){
     HLNode *hlist=readList(psList);
     HuffNode *huffmanTree=buildTree(hlist);
     printHTree(huffmanTree);
-    // printf("\n");
 
-    char *str = (char*) calloc(10, sizeof(char));
+    char *str = (char*) calloc(8, sizeof(char));
     printf("\n");
     printChar(huffmanTree, str, 0);
     printf("\n");
-    // str = (char*) calloc(10, sizeof(char));
-    // int size = 0;
-    // findLetter(huffmanTree, str, ' ', 0, &size);
-    // for (int i = 0; i < size; i++) {
-    //     printf("%c", str[i]);
-    // }
-    // printf("%s", tmp);
-    FILE *wr = fopen("test_bin.bin", "wb");
     i = 0;
-    str = (char*) calloc(2000, sizeof(char));
+    str = (char*) calloc(100, sizeof(char));
     int size = 0;
     int size_all = 0;
     do { 
         char *tmp = (char*) calloc(8, sizeof(char));
         findLetter(huffmanTree, tmp, tc[i], 0, &size);
+        // str = (char*) realloc(str, (size_all + size) * sizeof(char));
+        for (int j = size_all; j < size_all + size; j++) {
+            str[j] = tmp[j - size_all];
+        }
         size_all += size;
-        strcat(str, tmp);
         i++;
-
     } while(tc[i]!='\n');
+    free(tc);
 
     unsigned char* bits = str_to_bits(str, size_all);
     printf("str: %s, size: %d\n", str, size_all);
-    fwrite(bits, 1, ceil(size_all / 8), wr);
+    FILE *wr = fopen("test_bin.bin", "wb");
+    int size_of_header = 0;
+    fwrite(&size_of_header, 4, 1, wr);
+    str = (char*) calloc(8, sizeof(char));
+    printCharToFile(wr, huffmanTree, str, 0);
+    size_of_header = ftell(wr);
+    fseek(wr, 0, SEEK_SET);
+    fwrite(&size_of_header, 4, 1, wr);
+    fseek(wr, size_of_header, SEEK_SET);
+    fwrite(&size_all, 4, 1, wr);
+    fwrite(bits, 1, ceil(size_all / 8.0), wr);
     fclose(wr);
 
+    free(bits);
+    free(str);
     return 0;
 }
 
 unsigned char *str_to_bits(char *str, int size) {
-    unsigned char* bits_char = (char*) calloc(ceil(size / 8), sizeof(char));
-    for (int i = 0; i < size; i++) {
+    unsigned char* bits_char = (char*) calloc(ceil(size / 8.0), sizeof(char));
+    for (int i = 0; i < ceil(size / 8.0); i++) {
         for (int j = 0; j < 8 && j < (size - i * 8); j++) {
             bits_char[i] = bits_char[i] << 1;
             bits_char[i] += (str[i * 8 + j] - '0');
-            // printf("bit: %d, str[%d]: %c\n", bits_char[i], i + j, str[i + j]);
         }
     }
     return bits_char;
 }
 
-unsigned char *bits_to_str(char *bits_char, int size) {
-    // TODO
-    unsigned char* str = (char*) calloc(size * 8, sizeof(char));
+unsigned char *bits_to_str(unsigned char *bits_char, int size, int str_size) {
+    unsigned char* str = (char*) calloc(str_size, sizeof(char));
     for (int i = 0; i < size; i++) {
-        for (int j = 0; j < 8; j++) {
-            str[i * 8 + j] = (bits_char[i] >>  7 - j);
+        int j = 7;
+        while (i * 8 + j >= str_size) {
+            j--;
+        }
+        for (; j >= 0; j--) {
+            str[i * 8 + j] = (bits_char[i] % 2) + '0';
+            bits_char[i] /= 2;
         }
     }
     return str;
 }
 
 
-char *readFile() {
-    FILE *file = fopen("test.txt", "r");
+char *readFile(char *filename) {
+    FILE *file = fopen(filename, "r");
     if (file == NULL) return NULL;  //could not open
     char *code;
     size_t n = 0;
