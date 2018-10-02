@@ -93,7 +93,7 @@ unsigned char *bits_to_str(char *bits_char, int size) {
             str[i * 8 + j] = (bits_char[i] >>  7 - j);
         }
     }
-    return bits_char;
+    return str;
 }
 
 
