@@ -34,12 +34,11 @@ char *read_file(char *filename) {
         printf("Cannot open %s file!\n", filename);
         exit(1);
     }
-    fseek(f, SEEK_END, 0);
+    fseek(f, 0, SEEK_END);
     int size = ftell(f);
-    fseek(f, SEEK_CUR, 0);
+    fseek(f, 0, SEEK_SET);
     char *str = (char*) calloc(size, sizeof(char));
-    // TODO
-    fread(f, 1, size, str);
+    fread(str, 1, size, f);
     return str;
 }
 
