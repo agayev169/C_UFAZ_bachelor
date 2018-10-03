@@ -6,11 +6,17 @@
 # $< the first component
 # MACROS ;; SOURCES= LL.c Stack.c main.c
 
-SOURCES=$(wildcard *.c)
-EXEC=run
+SOURCES_COMPRESS = main.c LL.c HT.c
+EXEC_COMPRESS = compress
 
-$(EXEC) : $(SOURCES)
+SOURCES_DECOMPRESS = decompress.c HuffChar.h HuffChar.c
+EXEC_DECOMPRESS = decompress
+
+$(EXEC_COMPRESS): $(SOURCES_COMPRESS)
+	gcc $^ -o $@ -lm
+	
+$(EXEC_DECOMPRESS): $(SOURCES_DECOMPRESS)
 	gcc $^ -o $@ -lm
 
-clean :
-	rm $(SOURCES) $(EXEC)
+clean:
+	rm $(EXEC_COMPRESS) $(EXEC_DECOMPRESS)

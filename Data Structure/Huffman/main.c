@@ -70,7 +70,8 @@ int main() {
     fseek(wr, 0, SEEK_SET);
     fwrite(&size_of_header, 4, 1, wr);
     fseek(wr, size_of_header, SEEK_SET);
-    fwrite(&size_all, 4, 1, wr);
+    unsigned char dif = ceil(size_all / 8.0) * 8 - size_all;
+    fwrite(&dif, 1, 1, wr);
     fwrite(bits, 1, ceil(size_all / 8.0), wr);
     fclose(wr);
 

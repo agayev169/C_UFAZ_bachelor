@@ -123,8 +123,14 @@ void printCharToFile(FILE *f, HuffNode *hTree, char *str, int count) {
     if (hTree->left == NULL && hTree->right == NULL) {
         // printf("%c : ", hTree->ch);
         fwrite(&hTree->ch, 1, 1, f);
-        unsigned char byte = bits_to_char(str, count);
-        fwrite(&byte, 1, 1, f);
+        // unsigned char byte = bits_to_char(str, count);
+        // fwrite(&byte, 1, 1, f);
+        char *tmp = (char*) calloc(8, sizeof(char));
+        for (int i = 0; i < count; i++) {
+            tmp[i] = str[i];
+        }
+        tmp[count] = '\0';
+        fwrite(tmp, 1, 8, f);
     } else {
         if (hTree->left) {
             str[count] = '0';
