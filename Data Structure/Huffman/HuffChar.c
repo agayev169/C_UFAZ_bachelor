@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "HuffChar.h"
-    // TODO
+// TODO
 
 huff_char *read_header(char *filename, unsigned char *dif, int *size) {
     FILE *f = fopen(filename, "r");

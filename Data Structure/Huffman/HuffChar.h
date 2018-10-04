@@ -1,6 +1,6 @@
 #ifndef __HUFF_CHAR_H__
 #define __HUFF_CHAR_H__
-    // TODO
+// TODO
 
 typedef struct huff_char {
     char c;

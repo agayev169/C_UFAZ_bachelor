@@ -19,7 +19,7 @@ void bb_fill(BIT_BUFFER *buff, int s, int *bits) {
     for (int i = 0; i < s; i++) {
         if (buff->pos == 8) bb_print(buff);
         shift_pos = 8 - buff->pos - 1;
-        if (bitsTab[i] == 1) buff->bits = buff->bits | (1 << shift_pos);
+        if (bits[i] == 1) buff->bits = buff->bits | (1 << shift_pos);
         else buff->bits = buff->bits & (0 << shift_pos);
         buff->pos++;
     }
