@@ -18,8 +18,8 @@ struct Path {
 };
 
 int const N = 400;//Number of elements
-int const R = 5;//Radius
-float const C = 2.1;//Coefficient of velocity
+// int const R = 5;//Radius
+float const C = 2.1;//Magnitude of velocity
 
 Particle p[N];
 
@@ -69,7 +69,7 @@ int main(int argc, char *argv[]) {
 void timer2(int = 0) {
     path.v2[path.next].x = p[0].x;
     path.v2[path.next].y = p[0].y;
-    (++path.next)%=100;
+    (++path.next) %= 100;
     glutTimerFunc(1, timer2, 0);
 }
 
@@ -112,7 +112,7 @@ void drawParticle(Particle p) {
     glColor3f(0, 0, 0);
     for (int i = 0; i < 36; i++) {
         glVertex2f(p.x + p.r * cos(i * M_PI * 2 / 36), p.y + p.r * sin(i * M_PI * 2 / 36));
-        glVertex2f(p.x + p.r * cos((i+1) * M_PI * 2 / 36), p.y + p.r * sin((i+1) * M_PI * 2 / 36));
+        glVertex2f(p.x + p.r * cos((i + 1) * M_PI * 2 / 36), p.y + p.r * sin((i + 1) * M_PI * 2 / 36));
     }
     glEnd();
 }
