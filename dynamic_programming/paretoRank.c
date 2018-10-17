@@ -41,7 +41,6 @@ int main(int argc, char *argv[]) {
 }
 
 void delete(float **from, int from_n, int m, int index) {
-    float tmp[m];
     for (int i = 0; i < m; i++) {
         from[index][i] = from[from_n - 1][i];
     }
@@ -58,6 +57,8 @@ void delete_same(float **from, int from_n, float **orig, int orig_n, int m) {
             }
             if (same) {
                 delete(from, from_n--, m, j);
+                i--;
+                break;
             }
         }
     }
@@ -83,7 +84,7 @@ float **pareto_front(float **data, int objects_n, int objectives_n, int *count) 
             }
             if (domin == objectives_n) {
                 is_dominant = 0;
-                break;
+                // break;
             }
         }
         if (is_dominant) {

@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "gl.h": "c"
+        "gl.h": "c",
+        "stdlib.h": "c"
     }
 }
