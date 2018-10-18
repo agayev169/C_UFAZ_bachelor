@@ -2,55 +2,87 @@
 #include <stdlib.h>
 
 int max_genome(char *genome, int genome_n, char *mutation, int mutation_n);
-// int *max_subarray(int *dif, int size);
-int *max_subarray(char *matches, int size);
-char *matches(char *genome, int genome_n, char *mutation, int mutation_n);
+int max_subarray(int *dif, int size);
+// int max_subarray(char *matches, int size);
+int matches(char *genome, int genome_n, char *mutation, int mutation_n);
 int *difference(char *matches, int size);
 // int *global_min_max(int *array, int size);
+int global_max(int *array, int size);
 int *max_sum(char *matches, int size);
 
 int max_genome(char *genome, int genome_n, char *mutation, int mutation_n) {
 
 }
 
-char *matches(char *genome, int genome_n, char *mutation, int mutation_n) {
-    char *gr = (char*) calloc(genome_n, sizeof(char));
-    for (int i = 0; i < genome_n && i < mutation_n; i++) {
-        
+int matches(char *genome, int genome_n, char *mutation, int mutation_n) {
+    int max_score = 0;
+    int index = 0;
+    char *gr = (char*) calloc(mutation_n, sizeof(char));
+    for (int i = 0; i <= genome_n - mutation_n; i++) {
+        for (int j = 0; j < mutation_n; j++) {
+            gr[j] = (genome[i + j] == mutation[j]) ? 1 : -1;
+        }
+        int *dif = difference(gr, mutation_n);
+        int score = max_subarray(dif, mutation_n + 1);
+        for (int i = 0; i < mutation_n + 1; i++) {
+            // printf("%d ", dif[i]);
+        }
+        // printf("\n%d: %d\n", i, score);
+        if (max_score < score) {
+            max_score = score;
+            index = i;
+        }
+        free(dif);
     }
+    free(gr);
+    printf("max_score: %d\n", max_score);
+    return index;
 }
 
-/*int *max_subarray(int *dif, int size) {
-    int *globals = global_min_max(dif, size);
-    while (globals[0] >= globals[1]) {
-        printf("min: %d, max: %d\n", globals[0], globals[1]);
-        globals = global_min_max(dif, size - (size - globals[0]));
-    }
-    printf("min: %d, max: %d\n", globals[0], globals[1]);
-    return globals;
-}*/
-
-int *max_subarray(char *matches, int size) {
-    int score = 0;
-    int len = 0;
-    int index = 0;
-    int *res = (int*) calloc(3, sizeof(int));
-    for (int i = 0; i < size; i++) {
-        if (matches[i] == 1) {
-            int *cur = max_sum(matches + i, size - i);
-            printf("%d: %d, %d\n", i, cur[0], cur[1]);
-            if (cur[0] > score) {
-                score = cur[0];
-                len = cur[1];
-                index = i;
-            }
-            free(cur);
+int max_subarray(int *dif, int size) {
+    int max_score = 0; 
+    for (int i = 0; i < size - 1; i++) {
+        if (dif[i] > dif[i + 1]) continue;
+        int max_index = global_max(dif + i, size - i);
+        int score = dif[i + max_index] - dif[i];
+        if (score > max_score) {
+            max_score = score;
         }
     }
-    res[0] = score;
-    res[1] = index;
-    res[2] = len;
-    return res;
+    return max_score;
+}
+
+// int max_subarray(char *matches, int size) {
+//     int score = 0;
+//     int len = 0;
+//     int index = 0;
+//     int res = (int*) calloc(2, sizeof(int));
+//     for (int i = 0; i < size; i++) {
+//         if (matches[i] == 1) {
+//             int *cur = max_sum(matches + i, size - i);
+//             // printf("%d: %d, %d\n", i, cur[0], cur[1]);
+//             if (cur[0] > score) {
+//                 score = cur[0];
+//                 len = cur[1];
+//                 index = i;
+//             }
+//             free(cur);
+//         }
+//     }
+//     res = score;
+//     return res;
+// }
+
+int global_max(int *dif, int size) {
+    int max_val = dif[0];
+    int index = 0;
+    for (int i = 1; i < size; i++) {
+        if (dif[i] > max_val) {
+            max_val = dif[i];
+            index = i;
+        }
+    }
+    return index;
 }
 
 int *max_sum(char *matches, int size) {
