@@ -10,6 +10,8 @@ char mutate(char *word, int mutation_rate);
 char *read_genome(char *path);
 char *read_genome_with_mutation(char *path, char *mutation);
 char *random_string(int size, char *letters);
+void delete_at(char *word, int i);
+void insert_at(char *word, int i);
 
 int main(int argc, char *argv[]) {
     srand(time(NULL));
@@ -19,10 +21,11 @@ int main(int argc, char *argv[]) {
     for (int i = index_mut; i < index_mut + 100; i++) {
         mutation[i - index_mut] = genome[i];
     }
+    printf("index_mut: %d\n", index_mut);
 
     // printf("genome  : %s\n", genome);
-    // printf("mutation: %s\n", mutation);
-    mutate(mutation, 10);
+    printf("mutation: %s\n", mutation);
+    mutate(mutation, 50);
     printf("mutation: %s\n", mutation);
 
     int index = matches(genome, mutation);
@@ -30,25 +33,55 @@ int main(int argc, char *argv[]) {
 
     free(genome);
     free(mutation);
-
-    // char matches[] = {-1, 1, -1, 1, 1, 1, 1};
-    // difference(matches, 7);
-
     return 0;
 }
 
 char mutate(char *word, int mutation_rate) {
     // 0 <= mutation_rate <= 100
-    size_t word_n = strlen(word);
-    for (int i = 0; i < word_n; i++) {
+    const char DELETE = 0;
+    const char REPLACE = 1;
+    // const char INSERT = 2;
+    size_t word_len = strlen(word);
+    // word = realloc(word, word_len * 2 * sizeof(char));
+    for (int i = 0; i < word[i] != '\0'; i++) {
         if (rand() % 101 < mutation_rate) {
-            char c = word[i];
-            while (c == word[i]) {
-                word[i] = "acgt"[rand() % 4];
+            char action = rand() % 2;
+            // char action = rand() % 3;
+            if (action == REPLACE) {
+                char c = word[i];
+                while (c == word[i]) {
+                    word[i] = "acgt"[rand() % 4];
+                }
+            } else if (action == DELETE) {
+                delete_at(word, i);
+            // } else {
+            //     insert_at(word, i);
+            //     i++;
             }
-            // printf("%d: %c mutated to %c\n", i, c, word[i]);
         }
     }
+}
+
+void delete_at(char *word, int i) {
+    int word_len = strlen(word);
+    for (; i < word_len - 1; i++) {
+        word[i] = word[i + 1];
+    }
+    word[i] = 0;
+}
+
+void insert_at(char *word, int i) {
+    int word_len = strlen(word);
+    // word = realloc(word, (word_len + 1) * sizeof(char));
+    char tmp = word[i];
+    word[i++] = "acgt"[rand() % 4];
+
+    for (; i < strlen(word); i++) {
+        char tmp2 = word[i];
+        word[i] = tmp;
+        tmp = tmp2;
+    }
+    word[i] = tmp;
 }
 
 char *read_genome_with_mutation(char *path, char *mutation) {
@@ -92,6 +125,7 @@ char *read_genome_with_mutation(char *path, char *mutation) {
             genome[i++] = line[j];
             if (i >= MAX_SIZE) {
                 break;
+                free(line);
             }
         }
 
@@ -106,7 +140,7 @@ char *read_genome_with_mutation(char *path, char *mutation) {
         free(line);
     }
 
-    genome = realloc(genome, (i + 1) * sizeof(char));
+    // genome = realloc(genome, (i + 1) * sizeof(char));
     printf("size of genome: %d\n", i);
 
     printf("size of mutation: %zu\n", strlen(mutation));
@@ -127,6 +161,7 @@ char *read_genome(char *path) {
         // printf("%s", line);
         if (strcmp(line, "ORIGIN") == 0) {
             // printf("%s\n", line);
+            free(line);
             break;
         }
         free(line);
@@ -148,7 +183,7 @@ char *read_genome(char *path) {
         }
         free(line);
     }
-    genome = realloc(genome, i * sizeof(char));
+    // genome = realloc(genome, i * sizeof(char));
     printf("size of genome: %d\n", i);
 
     fclose(f);
