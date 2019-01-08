@@ -22,6 +22,7 @@ public:
     Tensor operator-=(const Tensor &);
     Tensor operator*(int) const;
     Tensor operator*=(T);
+    double dist(const Tensor &t) const;
     double mean() const;
     double std() const;
     std::vector<unsigned int> getSize() const;

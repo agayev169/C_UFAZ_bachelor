@@ -108,6 +108,20 @@ Tensor<T> Tensor<T>::operator*=(T x) {
 }
 
 template <class T> 
+double Tensor<T>::dist(const Tensor<T> &t) const {
+    double result = 0.0;
+    for (auto i = 0u; i < size_[0]; ++i) {
+        for (auto j = 0u; j < size_[1]; ++j) {
+            for (auto k = 0u; k < size_[2]; ++k) {
+                result += (data_[i][j][k] - t.data_[i][j][k]) * (data_[i][j][k] - t.data_[i][j][k]);
+            }
+        }
+    }
+    return sqrt(result);
+}
+
+
+template <class T> 
 double Tensor<T>::mean() const {
     double result = 0.0;
     for (auto i = 0u; i < size_[0]; ++i) {
