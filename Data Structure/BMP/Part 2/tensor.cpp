@@ -149,7 +149,7 @@ double Tensor<T>::std() const {
             result += (val / size_[2] - mean_) * (val / size_[2] - mean_);
         }
     }
-    result = result / size_[0] / size_[1];
+    result = result / (size_[0] * size_[1] - 1);
     result = sqrt(result);
     return result;
 }

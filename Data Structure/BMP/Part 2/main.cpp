@@ -14,7 +14,7 @@ using namespace std;
 vector<float> psf(const string &dirname, unsigned int steps = 10, unsigned int convX = 7, 
     unsigned int convY = 7, unsigned int iterations = 10, unsigned int downscaling = 4, bool verbose = true);
 void unwrapImages(const string &origDirname, const vector<float> &psf, 
-    const string &unwrapedDirname = "unwraped/", bool verbose = true);
+    const string &unwrappedDirname = "unwrapped/", bool verbose = true);
 string getFilename(const string &path);
 int compareStrings(const void *a, const void *b);
 
@@ -32,33 +32,38 @@ int main(int argc, char *argv[]) {
     unsigned int downscaling = 4;
     bool unwrap = false;
     bool flatten = false;
+    string psfindir = "imgs/";
     string indir = "imgs/";
-    string outdir = "unwraped/";
-    string flatIndir = "unwraped/";
-    string flatOutpath = "unwraped/flat.bmp";
+    string outdir = "unwrapped/";
+    string flatIndir = "unwrapped/";
+    string flatOutpath = "out.bmp";
     bool verbose = true;
 
     char c;
-    while ((c = getopt(argc, argv, "hp:s:d:S:i:u:P:o:f:O:v")) != -1) {
+    while ((c = getopt(argc, argv, "hD:p:s:d:S:i:u:P:o:g:O:v")) != -1) {
         if (c == 'h') {
-            cout << "This is a script to find PSF(Pixel Scaling Factor), \n" << 
-                "to scale an image based on PSF and to glue unwraped images" << endl;
+            cout << "This is a script to find PSF(Pixel Scaling Factor) values, \n" << 
+                "to scale an image based on PSF values and to glue unwrapped images" << endl;
             cout << endl;
-            cout << "-p filename: To calculate PSF and write it into filename (psf by default)" << endl;
+            cout << "-D dirname: To calculate PSF values using images from dirname directory (imgs/ by default)" << endl;
+            cout << "-p filename: To calculate PSF values and write it into filename (psf by default)" << endl;
             cout << "-s n: Number of PSF values to be find (10 by default)" << endl;
-            cout << "-d n: Downscaling factor. Images will be reduced by n to calculate PSF (4 by default)" << endl;
-            cout << "-S n: Size of a mask to be used to find PSF (5 by default)" << endl;
-            cout << "-i n: Number of images to be analyzed to calculate PSF (10 by default)" << endl;
+            cout << "-d n: Downscaling factor. Images will be reduced by n to calculate PSF values (4 by default)" << endl;
+            cout << "-S n: Size of a mask to be used to find PSF values (5 by default)" << endl;
+            cout << "-i n: Number of images to be analyzed to calculate PSF values (10 by default)" << endl;
             cout << "-P filename: To use PSF values from filename (psf by default) (is not used if -p is used)" << endl;
             cout << endl;
             cout << "-u dirname: To unwrap images from dirname (imgs/ by default)" << endl;
-            cout << "-o dirname: To save unwraped images to dirname (unwraped/ by default)" << endl;
+            cout << "-o dirname: To save unwrapped images to dirname (unwrapped/ by default)" << endl;
             cout << endl;
-            cout << "-f dirname: To flatten images from dirname (unwraped/ by default)" << endl;
-            cout << "-O filename: To save to filename (unwraped/flat.bmp by default)" << endl;
+            cout << "-g dirname: To glue images from dirname (unwrapped/ by default)" << endl;
+            cout << "-O filename: To save glued image to filename (out.bmp by default)" << endl;
             cout << endl;
-            cout << "-v: Stop showing progress" << endl;
+            cout << "-v: To stop showing progress" << endl;
             exit(0);
+        } else if (c == 'D') {
+            calcpsf = true;
+            psfindir = optarg;
         } else if (c == 'p') {
             calcpsf = true;
             psfOutFilename = optarg;
@@ -79,7 +84,7 @@ int main(int argc, char *argv[]) {
         } else if (c == 'o') {
             unwrap = true;
             outdir = optarg;
-        } else if (c == 'f') {
+        } else if (c == 'g') {
             flatten = true;
             flatIndir = optarg;
         } else if (c == 'O') {
@@ -156,6 +161,7 @@ int main(int argc, char *argv[]) {
 
 vector<string> getFilenames(string dir) {
     vector<string> images;
+    if (dir[dir.size() - 1] != '/') dir += '/';
     DIR *d = opendir(dir.c_str());
     if (d) {
         struct dirent *ent;
@@ -279,11 +285,11 @@ int compareFloats(const void *a, const void *b) {
 }
 
 void unwrapImages(const string &origDirname, const vector<float> &psf, 
-    const string &unwrapedDirname, bool verbose) {
+    const string &unwrappedDirname, bool verbose) {
     vector<string> images = getFilenames(origDirname);
 
-    mkdir(unwrapedDirname.c_str(), 0777);
-    string dir = unwrapedDirname;
+    mkdir(unwrappedDirname.c_str(), 0777);
+    string dir = unwrappedDirname;
     if (dir[dir.size() - 1] != '/') dir += '/';
     if (verbose)
         printPhase(0, images.size());
