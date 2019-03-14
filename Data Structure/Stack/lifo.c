@@ -37,12 +37,6 @@ int pop(Lifo *p, double *ans) {
     return 0;
 }
 
-int setSize(Lifo *p, int size) {
-
-
-    return 0;
-}
-
 int printTop(Lifo p) {
     if (p.size == 0) {
         fprintf(stderr, "Error in printTop function! Lifo is not created!\n");
@@ -52,6 +46,7 @@ int printTop(Lifo p) {
         return 2;
     } else
         printf("%lf\n", p.lifo[p.top - 1]);
+    return 0;
 }
 
 int print(Lifo p) {
@@ -64,6 +59,7 @@ int print(Lifo p) {
     } else
         for (int i = 0; i < p.top; i++)
             printf("Value of member #%d = %lf\n", i, p.lifo[i]);
+    return 0;
 }
 
 int destructLifo(Lifo *p) {

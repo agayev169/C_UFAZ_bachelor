@@ -1,18 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "lifo.h"
+#include <CUnit/CUnit.h>
 
 double plus(double x, double y) {return x+y;}
 double minus(double x, double y) {return x-y;}
 double mult(double x, double y) {return x*y;}
-double Div(double x, double y) {return x/y;}
-double Mod(double x, double y) {return (int)x%(int)y;}
+double div_(double x, double y) {return x/y;}
+double mod(double x, double y) {return (int)x%(int)y;}
 double error() {
-    fprintf(stderr,"ERROR! The only valid operators are + - * / %%\n");
+    fprintf(stderr,"ERROR! The only valid operators are +, -, *, / and %%\n");
     return 1;
 }
 
-double (*f[])()={plus, minus, mult, Div, Mod, error}; //Array of pointers on functions
+double (*f[])()={plus, minus, mult, div_, mod, error};
 
 int main(int argc, char const *argv[]) {
     // Lifo myCalcStack;
@@ -35,7 +36,7 @@ int main(int argc, char const *argv[]) {
 
     while(1) {
         printf("Enter numbers or operators/q to break: ");
-        scanf("%s", str);
+        scanf("%99s", str);
         if (str[0] == 'q') break;
         d = strtod(str, &p);
         if (p != str)
@@ -44,11 +45,11 @@ int main(int argc, char const *argv[]) {
             if (str[0] == '+' || str[0] == '-' || str[0] == '*' ||
                 str[0] == 'x' || str[0] == '/' || str[0] == '%') {
                     printf("Operator: %c\n", str[0]);
-                    if (pop(&lifo, &num1) == 0 && pop(&lifo, &num2) == 0)
-                        push(&lifo, (*f[aF[str[0]]])(num1, num2));
+                    if (pop(&lifo, &num2) == 0 && pop(&lifo, &num1) == 0)
+                        push(&lifo, (*f[aF[(int) str[0]]])(num1, num2));
                     else push(&lifo, num1);
                     printTop(lifo);
-            } else (*f[aF[str[0]]])();
+            } else (*f[aF[(int) str[0]]])();
         }
     }
 
