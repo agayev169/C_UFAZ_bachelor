@@ -1,7 +1,8 @@
 language: c
 compiler: gcc
 script: 
-- cd Data\ Structure/Stack/
+- |
+  cd Data\ Structure/Stack/
   make test
   ./test
   if [ $? -ne 0 ]
