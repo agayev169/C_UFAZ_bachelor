@@ -19,7 +19,7 @@ script:
   - make test
   - ./test
   - if [ $? -ne 0 ]; then
-      echo "Program failed on $? tests"
+      echo "Program failed on $? tests";
     else
-      echo "Program passed on all tests"
+      echo "Program passed on all tests";
     fi
