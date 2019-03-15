@@ -49,18 +49,6 @@ double top(Lifo p) {
     }
 }
 
-int printTop(Lifo p) {
-    if (p.size == 0) {
-        fprintf(stderr, "Error in printTop function! Lifo is not created!\n");
-        return 1;
-    } else if (p.top == 0) {
-        fprintf(stderr, "Error in printTop function! Lifo is empty!\n");
-        return 2;
-    } else
-        printf("%lf\n", p.lifo[p.top - 1]);
-    return 0;
-}
-
 int print(Lifo p) {
     if (p.size == 0) {
         fprintf(stderr, "Error in print function! Lifo is not created!\n");

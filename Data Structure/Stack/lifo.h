@@ -16,7 +16,6 @@ int push(Lifo *p, double n);
 int pop(Lifo *p, double *ans);
 int print(Lifo p);
 double top(Lifo p);
-int printTop(Lifo p);
 int destructLifo(Lifo *p);
 
 #endif

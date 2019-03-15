@@ -263,7 +263,6 @@ int main(int argc, char const *argv[]) {
                     if (pop(&lifo, &num2) == 0 && pop(&lifo, &num1) == 0)
                         push(&lifo, (*f[aF[(int) str[0]]])(num1, num2));
                     else push(&lifo, num2);
-                    printTop(lifo);
             } else (*f[aF[(int) str[0]]])();
         }
     }
