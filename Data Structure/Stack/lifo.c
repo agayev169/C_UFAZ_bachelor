@@ -37,6 +37,18 @@ int pop(Lifo *p, double *ans) {
     return 0;
 }
 
+double top(Lifo p) {
+    if (p.size == 0) {
+        fprintf(stderr, "Error in top function! Lifo is not created!\n");
+        return 1;
+    } else if (p.top == 0) {
+        fprintf(stderr, "Error in printTop function! Lifo is empty!\n");
+        return 2;
+    } else {
+        return p.lifo[p.top - 1];
+    }
+}
+
 int printTop(Lifo p) {
     if (p.size == 0) {
         fprintf(stderr, "Error in printTop function! Lifo is not created!\n");

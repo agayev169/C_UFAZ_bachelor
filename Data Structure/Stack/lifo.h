@@ -15,6 +15,7 @@ int setSize(Lifo *p, int size); // if size < size of Lifo - enlarge, else be car
 int push(Lifo *p, double n);
 int pop(Lifo *p, double *ans);
 int print(Lifo p);
+double top(Lifo p);
 int printTop(Lifo p);
 int destructLifo(Lifo *p);
 
