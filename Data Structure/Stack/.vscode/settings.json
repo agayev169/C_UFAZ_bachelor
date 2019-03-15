@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "basic.h": "c",
+        "cunit.h": "c",
+        "lifo.h": "c",
+        "cuerror.h": "c"
+    }
+}
