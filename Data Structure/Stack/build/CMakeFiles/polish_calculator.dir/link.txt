@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/polish_calculator.dir/main.c.o CMakeFiles/polish_calculator.dir/lifo.c.o  -o ../bin/polish_calculator -rdynamic -lm 

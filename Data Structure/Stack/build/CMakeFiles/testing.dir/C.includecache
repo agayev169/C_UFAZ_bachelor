@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/agayev169/C_UFAZ_bachelor/Data Structure/Stack/lifo.c
+stdio.h
+-
+stdlib.h
+-
+lifo.h
+/home/agayev169/C_UFAZ_bachelor/Data Structure/Stack/lifo.h
+
+/home/agayev169/C_UFAZ_bachelor/Data Structure/Stack/lifo.h
+stdio.h
+-
+stdlib.h
+-
+
+/home/agayev169/C_UFAZ_bachelor/Data Structure/Stack/test.c
+stdio.h
+-
+stdlib.h
+-
+lifo.h
+/home/agayev169/C_UFAZ_bachelor/Data Structure/Stack/lifo.h
+CUnit/CUnit.h
+-
+CUnit/Basic.h
+-
+

@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/testing.dir/test.c.o CMakeFiles/testing.dir/lifo.c.o  -o ../bin/testing -rdynamic -lm -lcunit 
