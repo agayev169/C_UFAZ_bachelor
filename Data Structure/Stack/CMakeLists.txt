@@ -10,7 +10,7 @@ file(GLOB SOURCES main.c lifo.c)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_link_libraries(${PROJECT_NAME} m)
-
+set_property(TARGET ${PROJECT_NAME} PROPERTY C_STANDARD 99)
 
 
 file(GLOB SOURCES test.c lifo.c)
