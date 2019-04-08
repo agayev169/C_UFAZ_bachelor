@@ -1,5 +1,0 @@
-/home/agayev169/C_UFAZ_bachelor/Data Structure/Stack/build/CMakeFiles/test.dir
-/home/agayev169/C_UFAZ_bachelor/Data Structure/Stack/build/CMakeFiles/polish_calculator.dir
-/home/agayev169/C_UFAZ_bachelor/Data Structure/Stack/build/CMakeFiles/testing.dir
-/home/agayev169/C_UFAZ_bachelor/Data Structure/Stack/build/CMakeFiles/rebuild_cache.dir
-/home/agayev169/C_UFAZ_bachelor/Data Structure/Stack/build/CMakeFiles/edit_cache.dir

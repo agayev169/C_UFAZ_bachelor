@@ -26,10 +26,4 @@ script:
   - cd build
   - cmake ..
   - make
-  - cd ../bin
-  - ./testing
-  - if [ $? -ne 0 ]; then
-      echo "Program failed on $? tests";
-    else
-      echo "Program passed all tests";
-    fi
+  - ctest
