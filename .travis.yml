@@ -20,9 +20,12 @@ addons:
       - libcunit1-dev
 
 script: 
-  - cd Data\ Structure/Stack/
-  - make test
-  - ./test
+  - cd Data\ Structure/Stack/build
+  - cmake ..
+  - cd ..
+  - make
+  - cd bin
+  - ./testing
   - if [ $? -ne 0 ]; then
       echo "Program failed on $? tests";
     else
